@@ -105,6 +105,9 @@ body {
     font-size: 28px;
     margin-top: -6px;
 }
+.weather{
+    display: none;
+}
 
 @media only screen and (max-width: 300px) {
     .card {
