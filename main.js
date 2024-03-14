@@ -7,11 +7,16 @@ const weatherIcon = document.querySelector(".weather-icon");
 
 
 async function checkWeather(city) {
-    try {
-        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
-        if (!response.ok) {
-            throw new Error('City not found');
-        }
+
+    const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+    if (response.status == 404) {
+        document.querySelector(".error").style.display = "block";
+        document.querySelector(".weather").style.display = "none";
+    }
+    else {
+        document.querySelector(".error").style.display = "none";
+        document.querySelector(".weather").style.display = "block";
+
         var data = await response.json();
         console.log(data);
         document.querySelector(".city").innerHTML = data.name;
@@ -19,7 +24,7 @@ async function checkWeather(city) {
         document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
         document.querySelector(".wind").innerHTML = data.wind.speed + "km/h";
 
-        if(data.weather[0].main=="Clouds"){
+        if (data.weather[0].main == "Clouds") {
             weatherIcon.src = "./cloud5.png"
         }
         else if (data.weather[0].main == "Clear") {
@@ -28,12 +33,11 @@ async function checkWeather(city) {
         else if (data.weather[0].main == "Rain") {
             weatherIcon.src = "./cloud4.png"
         }
-        document.querySelector(".weather").style.display="block";
 
-    } catch (error) {
-        console.error('Error fetching weather:', error.message);
     }
 }
+
+
 
 searchbtn.addEventListener("click", () => {
     checkWeather(searchbox.value);
